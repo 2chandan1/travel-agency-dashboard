@@ -10,7 +10,6 @@ import { getAllUsers } from "~/appwrite/auth";
 import type { Route } from "./+types/AllUsers";
 export const loader=async()=>{
   const {users,total}=await getAllUsers(10,0)
-  console.log("users",users);
   return {users, total}
 }
 const AllUsers = ({loaderData}:Route.ComponentProps) => {
@@ -46,7 +45,6 @@ const AllUsers = ({loaderData}:Route.ComponentProps) => {
             headerText="Email"
             width="200"
             textAlign="Left"
-            
           />
           <ColumnDirective
             field="joinedAt"
@@ -66,7 +64,6 @@ const AllUsers = ({loaderData}:Route.ComponentProps) => {
                   <h3 className={cn('font-inter text-xs font-medium ',status==='user'?'text-success-700':'text-gray-500')}>
                     {status}
                   </h3>
-                
               </article>
             )}
           />

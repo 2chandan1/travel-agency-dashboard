@@ -12,6 +12,7 @@ import { useState } from "react";
 import { world_map } from "~/constants/world_map";
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { account } from "~/appwrite/client";
+import { useNavigate } from "react-router";
 
 export const loader = async () => {
   const response = await fetch("https://restcountries.com/v3.1/all");
@@ -25,15 +26,8 @@ export const loader = async () => {
     url: country.flags?.svg,
   }));
 };
-// interface Country {
-//     name: string;
-//     coordinates: [number, number];
-//     value: string;
-//     openStreetMap?: string;
-//     url?: string;
-//   }
-
 const createTrip = ({ loaderData }: Route.ComponentProps) => {
+  const navigate = useNavigate();
   const countries = loaderData as Country[];
   const [formData, setFormData] = useState<TripFormData>({
     country: countries[0]?.name || "",
@@ -43,45 +37,59 @@ const createTrip = ({ loaderData }: Route.ComponentProps) => {
     duration: 0,
     groupType: "",
   });
-  const [error, setErroe]=useState<string|null>(null)
-  const [loading,setLoading]=useState(false)
-  const handleSubmit = async (event:React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const [error, setErroe] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setLoading(true);
-    if(!formData.country ||!formData.travelStyle ||!formData.interest ||!formData.budget|| !formData.groupType){
-        setErroe('Please provide value for all fields')
-        setLoading(false)
-        return;
+    if (
+      !formData.country ||
+      !formData.travelStyle ||
+      !formData.interest ||
+      !formData.budget ||
+      !formData.groupType
+    ) {
+      setErroe("Please provide value for all fields");
+      setLoading(false);
+      return;
     }
-    if(formData.duration<1  || formData.duration>10){
-        setErroe('Duration must be between 1 and 10 days')
-        setLoading(false)
-        return;
+    if (formData.duration < 1 || formData.duration > 10) {
+      setErroe("Duration must be between 1 and 10 days");
+      setLoading(false);
+      return;
     }
-    const user=await account.get();
-    if(!user.$id){
-        console.log('User not authenticated');
-        setLoading(false)
-        return
-        
+    const user = await account.get();
+    if (!user.$id) {
+      console.log("User not authenticated");
+      setLoading(false);
+      return;
     }
     try {
-        console.log('user',user);
-        console.log('formdata',formData);
-        
-        
+      const response = await fetch("/api/create-trip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          country: formData.country,
+          numberOfDays: formData.duration,
+          travelStyle: formData.travelStyle,
+          interests: formData.interest,
+          budget: formData.budget,
+          groupType: formData.groupType,
+          userId: user.$id,
+        }),
+      });
+      const result: CreateTripResponse = await response.json();
+      if (result?.id) navigate(`/trips/${result.id}`);
+      else console.error("Failed to generate a trip");
     } catch (e) {
-        console.log('Error generating Trip',e);
-        
-    }finally{
-        setLoading(false)
+      console.error("Error generating Trip", e);
+    } finally {
+      setLoading(false);
     }
   };
   const handleChange = (key: keyof TripFormData, value: string | number) => {
-    setFormData({...formData,[key]:value})
+    setFormData({ ...formData, [key]: value });
   };
-
-  console.log(countries);
   const countryData = countries.map((country) => ({
     text: country.name,
     value: country.value,
@@ -193,18 +201,27 @@ const createTrip = ({ loaderData }: Route.ComponentProps) => {
               </LayersDirective>
             </MapsComponent>
           </div>
-          <div className="bg-gray-200 h-px w-full"/>
-          {error &&(
+          <div className="bg-gray-200 h-px w-full" />
+          {error && (
             <div className="error">
-                <p> {error} </p>
+              <p> {error} </p>
             </div>
           )}
           <footer className="px-6 w-full ">
-            <ButtonComponent type="submit" className="button-class !h-12 !w-full" disabled={loading}>
-                <img src={`/assets/icons/${loading?'loader.svg':'magic-star.svg'}`} className={cn("size-5",{'animate-spin':loading})} />
-                <span className="p-16-semibold text-white">
-                    {loading ?'Generating...':'Generate Trip'}
-                </span>
+            <ButtonComponent
+              type="submit"
+              className="button-class !h-12 !w-full"
+              disabled={loading}
+            >
+              <img
+                src={`/assets/icons/${
+                  loading ? "loader.svg" : "magic-star.svg"
+                }`}
+                className={cn("size-5", { "animate-spin": loading })}
+              />
+              <span className="p-16-semibold text-white">
+                {loading ? "Generating..." : "Generate Trip"}
+              </span>
             </ButtonComponent>
           </footer>
         </form>
