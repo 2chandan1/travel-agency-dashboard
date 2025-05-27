@@ -28,4 +28,5 @@ export const getTripById=async(tripId:string)=>{
         return null
         
     }
+    return trip;
 }
