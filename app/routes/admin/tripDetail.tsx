@@ -27,7 +27,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 const TripDetail = ({ loaderData }: Route.ComponentProps) => {
   console.log("loaderdats", loaderData);
-  const imageUrl = loaderData?.trip?.imageUrl || [];
+  const imageUrls = loaderData?.trip?.imageUrl || [];
   const tripDtata = parseTripData(loaderData?.trip?.tripDetail);
   const allTrips = loaderData.allTrips as Trip[] | [];
   const {
@@ -83,7 +83,7 @@ const TripDetail = ({ loaderData }: Route.ComponentProps) => {
           </div>
         </header>
         <section className="gallery">
-          {imageUrl.map((url: string, i: number) => (
+          {imageUrls.map((url: string, i: number) => (
             <img
               src={url}
               alt="image"
@@ -203,7 +203,7 @@ const TripDetail = ({ loaderData }: Route.ComponentProps) => {
                   key={id}
                   name={name}
                   location={itinerary?.[0].location ?? ""}
-                  imageUrl={imageUrl[0]}
+                  imageUrl={imageUrls[0]}
                   tags={[interests, travelStyle]}
                   price={estimatedPrice}
                 />
