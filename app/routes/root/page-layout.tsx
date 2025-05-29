@@ -1,30 +1,30 @@
-import React from 'react'
-import { useNavigate } from 'react-router';
-import { logoutUser } from '~/appwrite/auth';
+import { Outlet, redirect } from "react-router";
+import { UserFooter, UserHeader } from "components";
+import { account } from "~/appwrite/client";
+import { getExistingUser, storeUserData } from "~/appwrite/auth";
+export async function clientLoader() {
+  try {
+    const user = await account.get();
 
+     if(!user.$id) return redirect('/sign-in');
+
+     const existingUser = await getExistingUser(user.$id);
+    return existingUser?.$id ? existingUser : await storeUserData();
+  } catch (error) {
+    console.log("Error in clientLoader", error);
+    return redirect("/sign-in");
+  }
+}
 const PageLayout = () => {
-    const navigate = useNavigate();
-    const handleLogOut = async () => {
-      await logoutUser();
-      navigate("/sign-in");
-    };
   return (
-    <div>PageLayout
-
-<button onClick={handleLogOut} className="cursor-pointer">
-            <img
-              src="/assets/icons/logout.svg"
-              alt="logout"
-              className="size-6"
-            />
-          </button>
-
-          <button className="cursor-pointer " onClick={()=>{navigate('/dashboard')}}>
-            Dashboard
-          </button>
-    </div>
-    
+      <div className="">
+            <UserHeader/>
+          <aside className="user-trip ">
+             
+              <Outlet />
+          </aside>
+          <UserFooter/>
+      </div>
   )
 }
-
 export default PageLayout
