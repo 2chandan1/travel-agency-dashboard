@@ -1,7 +1,7 @@
 
 const TripCardSmall = ({ trip }) => {
     // You can now safely access trip.name, trip.imageUrls, etc.
-    console.log("trip for small component",trip.imageUrls[0]);
+   
     
     return (
       <div className="relative">

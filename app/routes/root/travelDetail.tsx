@@ -73,7 +73,6 @@ const TravelDetail = ({ loaderData }: Route.ComponentProps) => {
   ];
   return (
     <>
-      {/* <div className="flex flex-row wrapper"> */}
 
       <main className="travel-detail wrapper  top-1/6">
         <section className="container wrapper-md">
@@ -259,7 +258,6 @@ const TravelDetail = ({ loaderData }: Route.ComponentProps) => {
           </div>
         </section>
       </main>
-      {/* </div> */}
     </>
   );
 };

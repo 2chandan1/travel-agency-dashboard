@@ -1,6 +1,5 @@
 import { Header, StatsCard, TripCard } from "components";
 import { getAllUsers, getUser } from "~/appwrite/auth";
-// import { dashboardStats, allTrips } from "~/constants";
 import type { Route } from "./+types/dashboard";
 import {
   getTripsByTravelStyle,
@@ -40,7 +39,7 @@ export const clientLoader = async () => {
     await getTripsByTravelStyle(),
     await getAllUsers(4, 0),
   ]);
-  // console.log("dashboardStats", dashboardStats);
+ 
   const allTrips = trips.allTrips.map(({ $id, tripDetail, imageUrl }) => ({
     id: $id,
     ...parseTripData(tripDetail),

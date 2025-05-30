@@ -8,7 +8,7 @@ import { TripCard,TripGrid } from "components";
 import { PagerComponent } from "@syncfusion/ej2-react-grids";
 import { useState } from "react";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  // console.log("params", params);
+ 
   const limit = 8;
   const url = new URL(request.url);
   const [trips] = await Promise.all([getAllTrips(10, 0)]);
@@ -25,9 +25,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   };
 };
 const TeavelPage = ({ loaderData }: Route.ComponentProps) => {
-  console.log("loaderData", loaderData);
   const allTrips = loaderData.allTrips as Trip[] | [];
-  // console.log("imageurl",imageUrls);
   const [searchParams] = useSearchParams();
   const initialPage = Number(searchParams.get("page" || "1"));
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -102,10 +100,10 @@ const TeavelPage = ({ loaderData }: Route.ComponentProps) => {
           </div>
           <PagerComponent
             totalRecordsCount={loaderData.total}
-            pageSize={4}
+            pageSize={8}
             currentPage={currentPage}
             click={(args) => handlePageChange(args.currentPage)}
-            cssClass="!mb-4"
+            cssClass="!mb-4 !mt-4"
           />
         </section>
       </main>

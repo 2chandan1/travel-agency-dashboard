@@ -7,7 +7,6 @@ const UserHeader = () => {
   
   const user = useLoaderData();
   const navigate = useNavigate();
-  console.log("logedin user", user);
   const handleLogOut = async () => {
     await logoutUser();
     navigate("/sign-in");

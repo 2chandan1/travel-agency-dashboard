@@ -6,7 +6,7 @@ export default function TripGrid({ allTrips }) {
   if (!allTrips ) {
     return <p className="text-red-500">Not enough trip data available.</p>;
   }
-  console.log("allTrips",allTrips);
+ 
   
 
   return (

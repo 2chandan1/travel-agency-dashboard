@@ -12,6 +12,8 @@
     "@google/generative-ai": "^0.24.1",
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
+    "@stripe/react-stripe-js": "^3.7.0",
+    "@stripe/stripe-js": "^7.3.1",
     "@syncfusion/ej2-base": "^29.2.4",
     "@syncfusion/ej2-react-buttons": "^29.2.4",
     "@syncfusion/ej2-react-charts": "^29.2.4",
